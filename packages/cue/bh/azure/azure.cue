@@ -250,6 +250,13 @@ TenantID: types.#StringEnum & {
 	representation: "tenantid"
 }
 
+Country: types.#StringEnum & {
+	symbol:         "Country"
+	schema:         "azure"
+	name:           "Country"
+	representation: "country"
+}
+
 Properties: [
 	AppOwnerOrganizationID,
 	AppDescription,
@@ -283,6 +290,7 @@ Properties: [
 	PublisherDomain,
 	SignInAudience,
 	RoleTemplateID,
+	Country,
 ]
 
 // Kinds

@@ -130,6 +130,7 @@ const (
 	PublisherDomain         Property = "publisherdomain"
 	SignInAudience          Property = "signinaudience"
 	RoleTemplateID          Property = "templateid"
+	Country					Property = "country"
 )
 
 func AllProperties() []Property {
@@ -201,6 +202,8 @@ func ParseProperty(source string) (Property, error) {
 		return SignInAudience, nil
 	case "templateid":
 		return RoleTemplateID, nil
+	case "country":
+		return Country, nil
 	default:
 		return "", errors.New("Invalid enumeration value: " + source)
 	}
@@ -271,6 +274,8 @@ func (s Property) String() string {
 		return string(SignInAudience)
 	case RoleTemplateID:
 		return string(RoleTemplateID)
+	case Country:
+		return string(Country)
 	default:
 		return "Invalid enumeration case: " + string(s)
 	}
@@ -341,6 +346,8 @@ func (s Property) Name() string {
 		return "Sign In Audience"
 	case RoleTemplateID:
 		return "Role Template ID"
+	case Country:
+		return "Country"
 	default:
 		return "Invalid enumeration case: " + string(s)
 	}

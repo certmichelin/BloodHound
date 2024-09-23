@@ -1211,6 +1211,7 @@ func ConvertAzureUser(data models.User) (IngestibleNode, IngestibleNode, Ingesti
 				azure.UserPrincipalName.String(): data.UserPrincipalName,
 				azure.UserType.String():          data.UserType,
 				azure.TenantID.String():          strings.ToUpper(data.TenantId),
+				azure.Country.String():           data.Country,
 			},
 			Label: azure.User,
 		}, onPremNode, NewIngestibleRelationship(
