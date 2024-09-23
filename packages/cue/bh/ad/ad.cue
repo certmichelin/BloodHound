@@ -320,11 +320,11 @@ TrustType: types.#StringEnum & {
 	representation: "trusttype"
 }
 
-SidFiltering: types.#StringEnum & {
-	symbol:         "SidFiltering"
+SpoofSIDHistoryBlocked: types.#StringEnum & {
+	symbol:         "SpoofSIDHistoryBlocked"
 	schema:         "ad"
-	name:           "SID Filtering Enabled"
-	representation: "sidfiltering"
+	name:           "Spoof SID History Blocked"
+	representation: "spoofsidhistoryblocked"
 }
 
 TrustedToAuth: types.#StringEnum & {
@@ -600,11 +600,11 @@ SupportedKerberosEncryptionTypes: types.#StringEnum & {
 	representation: "supportedencryptiontypes"
 }
 
-TGTDelegationEnabled: types.#StringEnum & {
-	symbol:         "TGTDelegationEnabled"
+TGTDelegation: types.#StringEnum & {
+	symbol:         "TGTDelegation"
 	schema:         "ad"
-	name:           "TGT Delegation Enabled"
-	representation: "tgtdelegationenabled"
+	name:           "TGT Delegation"
+	representation: "tgtdelegation"
 }
 
 PasswordStoredUsingReversibleEncryption: types.#StringEnum & {
@@ -670,11 +670,25 @@ UserAccountControl: types.#StringEnum & {
 	representation: "useraccountcontrol"
 }
 
-TrustAttributes: types.#StringEnum & {
-	symbol:         "TrustAttributes"
+TrustAttributesInbound: types.#StringEnum & {
+	symbol:         "TrustAttributesInbound"
 	schema:         "ad"
-	name:           "Trust Attributes"
-	representation: "trustattributes"
+	name:           "Trust Attributes (Inbound)"
+	representation: "trustattributesinbound"
+}
+
+TrustAttributesOutbound: types.#StringEnum & {
+	symbol:         "TrustAttributesOutbound"
+	schema:         "ad"
+	name:           "Trust Attributes (Outbound)"
+	representation: "trustattributesoutbound"
+}
+
+TrustTransitive: types.#StringEnum & {
+	symbol:         "TrustTransitive"
+	schema:         "ad"
+	name:           "Transitive"
+	representation: "trusttransitive"
 }
 
 LockoutDuration: types.#StringEnum & {
@@ -748,9 +762,9 @@ MSA: types.#StringEnum & {
 }
 
 SMBSigning: types.#StringEnum & {
-	symbol: "SMBSigning"
-	schema: "ad"
-	name: "SMB Signing"
+	symbol:         "SMBSigning"
+	schema:         "ad"
+	name:           "SMB Signing"
 	representation: "smbsigning"
 }
 
@@ -762,9 +776,9 @@ WebClientRunning: types.#StringEnum & {
 }
 
 RestrictOutboundNTLM: types.#StringEnum & {
-	symbol: "RestrictOutboundNTLM"
-	schema: "ad"
-	name: "Restrict Outbound NTLM"
+	symbol:         "RestrictOutboundNTLM"
+	schema:         "ad"
+	name:           "Restrict Outbound NTLM"
 	representation: "restrictoutboundntlm"
 }
 
@@ -887,6 +901,12 @@ HasVulnerableEndpoint: types.#StringEnum & {
 	representation: "hasvulnerableendpoint"
 }
 
+GroupScope: types.#StringEnum & {
+	symbol:         "GroupScope"
+	schema:         "ad"
+	name:           "Group Scope"
+	representation: "groupscope"
+}
 
 Properties: [
 	AdminCount,
@@ -931,7 +951,7 @@ Properties: [
 	PasswordNotRequired,
 	FunctionalLevel,
 	TrustType,
-	SidFiltering,
+	SpoofSIDHistoryBlocked,
 	TrustedToAuth,
 	SamAccountName,
 	CertificateMappingMethodsRaw,
@@ -970,7 +990,7 @@ Properties: [
 	ExpirePasswordsOnSmartCardOnlyAccounts,
 	MachineAccountQuota,
 	SupportedKerberosEncryptionTypes,
-	TGTDelegationEnabled,
+	TGTDelegation,
 	PasswordStoredUsingReversibleEncryption,
 	SmartcardRequired,
 	UseDESKeyOnly,
@@ -980,7 +1000,9 @@ Properties: [
 	PasswordExpired,
 	DSHeuristics,
 	UserAccountControl,
-	TrustAttributes,
+	TrustAttributesInbound,
+	TrustAttributesOutbound,
+	TrustTransitive,
 	MinPwdLength,
 	PwdProperties,
 	PwdHistoryLength,
@@ -1007,7 +1029,8 @@ Properties: [
 	IsDC,
 	HTTPEnrollmentEndpoints,
 	HTTPSEnrollmentEndpoints,
-	HasVulnerableEndpoint
+	HasVulnerableEndpoint,
+	GroupScope
 ]
 
 // Kinds
@@ -1204,8 +1227,23 @@ GetChangesAll: types.#Kind & {
 	schema: "active_directory"
 }
 
-TrustedBy: types.#Kind & {
-	symbol: "TrustedBy"
+CrossForestTrust: types.#Kind & {
+	symbol: "CrossForestTrust"
+	schema: "active_directory"
+}
+
+SameForestTrust: types.#Kind & {
+	symbol: "SameForestTrust"
+	schema: "active_directory"
+}
+
+SpoofSIDHistory: types.#Kind & {
+	symbol: "SpoofSIDHistory"
+	schema: "active_directory"
+}
+
+AbuseTGTDelegation: types.#Kind & {
+	symbol: "AbuseTGTDelegation"
 	schema: "active_directory"
 }
 
@@ -1518,7 +1556,10 @@ RelationshipKinds: [
 	GetChanges,
 	GetChangesAll,
 	GetChangesInFilteredSet,
-	TrustedBy,
+	CrossForestTrust,
+	SameForestTrust,
+	SpoofSIDHistory,
+	AbuseTGTDelegation,
 	AllowedToAct,
 	AdminTo,
 	CanPSRemote,
@@ -1626,6 +1667,9 @@ SharedRelationshipKinds: [
 	GPLink,
 	AllowedToDelegate,
 	CoerceToTGT,
+	SameForestTrust,
+	SpoofSIDHistory,
+	AbuseTGTDelegation,
 	AllowedToAct,
 	AdminTo,
 	CanPSRemote,
@@ -1671,7 +1715,7 @@ InboundRelationshipKinds: list.Concat([SharedRelationshipKinds,[Contains]])
 OutboundRelationshipKinds: list.Concat([SharedRelationshipKinds,[Contains, DCFor]])
 
 // Edges that are used in pathfinding
-PathfindingRelationships: list.Concat([SharedRelationshipKinds,[Contains, DCFor, TrustedBy]])
+PathfindingRelationships: list.Concat([SharedRelationshipKinds,[Contains, DCFor, SameForestTrust, SpoofSIDHistory, AbuseTGTDelegation]])
 
 EdgeCompositionRelationships: [
 	GoldenCert,

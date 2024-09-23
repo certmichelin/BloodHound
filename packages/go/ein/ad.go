@@ -665,12 +665,11 @@ func ParseGpLinks(links []GPLink, itemIdentifier string, itemType graph.Kind) []
 func ParseDomainTrusts(domain Domain) ParsedDomainTrustData {
 	parsedData := ParsedDomainTrustData{}
 	for _, trust := range domain.Trusts {
-		var finalTrustAttributes int
+		finalTrustAttributes := -1
 		switch converted := trust.TrustAttributes.(type) {
 		case string:
 			if i, err := strconv.Atoi(converted); err != nil {
 				slog.Error(fmt.Sprintf("Error converting trust attributes %s to int", converted))
-				finalTrustAttributes = 0
 			} else {
 				finalTrustAttributes = i
 			}
@@ -678,7 +677,6 @@ func ParseDomainTrusts(domain Domain) ParsedDomainTrustData {
 			finalTrustAttributes = converted
 		default:
 			slog.Error(fmt.Sprintf("Error converting trust attributes %s to int", converted))
-			finalTrustAttributes = 0
 		}
 
 		parsedData.ExtraNodeProps = append(parsedData.ExtraNodeProps, IngestibleNode{
@@ -687,31 +685,25 @@ func ParseDomainTrusts(domain Domain) ParsedDomainTrustData {
 			Label:       ad.Domain,
 		})
 
-		var dir = trust.TrustDirection
-		if dir == TrustDirectionInbound || dir == TrustDirectionBidirectional {
-			parsedData.TrustRelationships = append(parsedData.TrustRelationships, NewIngestibleRelationship(
-				IngestibleSource{
-					Source:     domain.ObjectIdentifier,
-					SourceType: ad.Domain,
-				},
-				IngestibleTarget{
-					Target:     trust.TargetDomainSid,
-					TargetType: ad.Domain,
-				},
-				IngestibleRel{
-					RelProps: map[string]any{
-						ad.IsACL.String():      false,
-						"sidfiltering":         trust.SidFilteringEnabled,
-						"tgtdelegationenabled": trust.TGTDelegationEnabled,
-						"trustattributes":      finalTrustAttributes,
-						"trusttype":            trust.TrustType,
-						"transitive":           trust.IsTransitive},
-					RelType: ad.TrustedBy,
-				},
-			))
+		// Determine edge type
+		edgeType := ad.CrossForestTrust
+		if trust.TrustType == "ParentChild" || trust.TrustType == "TreeRoot" || trust.TrustType == "CrossLink" {
+			edgeType = ad.SameForestTrust
 		}
 
-		if dir == TrustDirectionOutbound || dir == TrustDirectionBidirectional {
+		var dir = trust.TrustDirection
+		if dir == TrustDirectionInbound || dir == TrustDirectionBidirectional {
+			realProps := map[string]any{
+				"isacl":           false,
+				"trusttype":       trust.TrustType,
+				"trusttransitive": trust.IsTransitive}
+
+			// Only add trustattributes if actually collected
+			if finalTrustAttributes >= 0 {
+				realProps["trustattributesinbound"] = finalTrustAttributes
+				realProps["tgtdelegation"] = trust.TGTDelegationEnabled // collection of tgtdelegation was added with trustattributes
+			}
+
 			parsedData.TrustRelationships = append(parsedData.TrustRelationships, NewIngestibleRelationship(
 				IngestibleSource{
 					Source:     trust.TargetDomainSid,
@@ -722,16 +714,78 @@ func ParseDomainTrusts(domain Domain) ParsedDomainTrustData {
 					TargetType: ad.Domain,
 				},
 				IngestibleRel{
-					RelProps: map[string]any{
-						ad.IsACL.String():      false,
-						"sidfiltering":         trust.SidFilteringEnabled,
-						"tgtdelegationenabled": trust.TGTDelegationEnabled,
-						"trustattributes":      finalTrustAttributes,
-						"trusttype":            trust.TrustType,
-						"transitive":           trust.IsTransitive},
-					RelType: ad.TrustedBy,
+					RelProps: realProps,
+					RelType:  edgeType,
 				},
 			))
+
+			if edgeType == ad.CrossForestTrust && trust.TGTDelegationEnabled {
+				parsedData.TrustRelationships = append(parsedData.TrustRelationships, NewIngestibleRelationship(
+					IngestibleSource{
+						Source:     trust.TargetDomainSid,
+						SourceType: ad.Domain,
+					},
+					IngestibleTarget{
+						Target:     domain.ObjectIdentifier,
+						TargetType: ad.Domain,
+					},
+					IngestibleRel{
+						RelProps: map[string]any{
+							"isacl":     false,
+							"trusttype": trust.TrustType,
+						},
+						RelType: ad.AbuseTGTDelegation,
+					},
+				))
+			}
+		}
+
+		if dir == TrustDirectionOutbound || dir == TrustDirectionBidirectional {
+			realProps := map[string]any{
+				"isacl":                  false,
+				"spoofsidhistoryblocked": trust.SidFilteringEnabled,
+				"trusttype":              trust.TrustType,
+				"trusttransitive":        trust.IsTransitive}
+
+			// Only add trustattributes if actually collected
+			if finalTrustAttributes >= 0 {
+				realProps["trustattributesoutbound"] = finalTrustAttributes
+			}
+
+			parsedData.TrustRelationships = append(parsedData.TrustRelationships, NewIngestibleRelationship(
+				IngestibleSource{
+					Source:     domain.ObjectIdentifier,
+					SourceType: ad.Domain,
+				},
+				IngestibleTarget{
+					Target:     trust.TargetDomainSid,
+					TargetType: ad.Domain,
+				},
+				IngestibleRel{
+					RelProps: realProps,
+					RelType:  edgeType,
+				},
+			))
+
+			if edgeType == ad.CrossForestTrust && !trust.SidFilteringEnabled {
+				parsedData.TrustRelationships = append(parsedData.TrustRelationships, NewIngestibleRelationship(
+					IngestibleSource{
+						Source:     trust.TargetDomainSid,
+						SourceType: ad.Domain,
+					},
+					IngestibleTarget{
+						Target:     domain.ObjectIdentifier,
+						TargetType: ad.Domain,
+					},
+					IngestibleRel{
+						RelProps: map[string]any{
+							"isacl":     false,
+							"trusttype": trust.TrustType,
+						},
+						RelType: ad.SpoofSIDHistory,
+					},
+				))
+			}
 		}
 	}
 
