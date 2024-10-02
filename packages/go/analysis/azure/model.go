@@ -240,3 +240,9 @@ type LogicAppDetails struct {
 
 	InboundObjectControl int `json:"inbound_object_control"`
 }
+
+type NetworkSecurityGroupDetails struct {
+	Node
+
+	InboundObjectControl int `json:"inbound_object_control"`
+}

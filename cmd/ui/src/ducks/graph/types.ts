@@ -49,7 +49,7 @@ export enum GraphNodeTypes {
     NTAuthStore = 'NTAuthStore',
     CertTemplate = 'CertTemplate',
     IssuancePolicy = 'IssuancePolicy',
-}
+    AZNetworkSecurityGroup = 'AZNetworkSecurityGroup',}
 
 export interface GraphNodeData {
     count: number;

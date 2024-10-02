@@ -1805,6 +1805,17 @@ func ConvertAzureAutomationAccount(account models.AutomationAccount) (Ingestible
 	return node, relationships
 }
 
+func ConvertAzureNetworkSecurityGroup(data models.NetworkSecurityGroup) IngestibleNode {
+	return IngestibleNode{
+		ObjectID: strings.ToUpper(data.Id),
+		PropertyMap: map[string]any{
+			common.Name.String():    strings.ToUpper(data.Name),
+			azure.TenantID.String(): strings.ToUpper(data.TenantId),
+		},
+		Label: azure.NetworkSecurityGroup,
+	}
+}
+
 func CanAddSecret(roleDefinitionId string) bool {
 	return roleDefinitionId == azure.ApplicationAdministratorRole || roleDefinitionId == azure.CloudApplicationAdministratorRole
 }

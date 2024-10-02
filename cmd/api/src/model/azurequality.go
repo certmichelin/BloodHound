@@ -17,24 +17,25 @@
 package model
 
 type AzureStatKinds struct {
-	Relationships       int `json:"relationships"`
-	Users               int `json:"users"`
-	Groups              int `json:"groups"`
-	Apps                int `json:"apps"`
-	ServicePrincipals   int `json:"service_principals"`
-	Devices             int `json:"devices"`
-	ManagementGroups    int `json:"management_groups"`
-	Subscriptions       int `json:"subscriptions"`
-	ResourceGroups      int `json:"resource_groups"`
-	VMs                 int `json:"vms"`
-	KeyVaults           int `json:"key_vaults"`
-	AutomationAccounts  int `json:"automation_accounts"`
-	ContainerRegistries int `json:"container_registries"`
-	FunctionApps        int `json:"function_apps"`
-	LogicApps           int `json:"logic_apps"`
-	ManagedClusters     int `json:"managed_clusters"`
-	VMScaleSets         int `json:"vm_scale_sets"`
-	WebApps             int `json:"web_apps"`
+	Relationships         int `json:"relationships"`
+	Users                 int `json:"users"`
+	Groups                int `json:"groups"`
+	Apps                  int `json:"apps"`
+	ServicePrincipals     int `json:"service_principals"`
+	Devices               int `json:"devices"`
+	ManagementGroups      int `json:"management_groups"`
+	Subscriptions         int `json:"subscriptions"`
+	ResourceGroups        int `json:"resource_groups"`
+	VMs                   int `json:"vms"`
+	KeyVaults             int `json:"key_vaults"`
+	AutomationAccounts    int `json:"automation_accounts"`
+	ContainerRegistries   int `json:"container_registries"`
+	FunctionApps          int `json:"function_apps"`
+	LogicApps             int `json:"logic_apps"`
+	ManagedClusters       int `json:"managed_clusters"`
+	VMScaleSets           int `json:"vm_scale_sets"`
+	WebApps               int `json:"web_apps"`
+	NetworkSecurityGroups int `json:"network_security_group"`
 }
 
 type AzureDataQualityStat struct {

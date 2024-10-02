@@ -93,6 +93,7 @@ var (
 	AZMGGrantAppRoles                    = graph.StringKind("AZMGGrantAppRoles")
 	AZMGGrantRole                        = graph.StringKind("AZMGGrantRole")
 	SyncedToADUser                       = graph.StringKind("SyncedToADUser")
+	NetworkSecurityGroup				 = graph.StringKind("AZNetworkSecurityGroup")
 )
 
 type Property string

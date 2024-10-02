@@ -159,6 +159,10 @@ func GraphStats(ctx context.Context, db graph.Database) (model.AzureDataQualityS
 									stat.WebApps = int(count)
 									aggregation.WebApps += int(count)
 
+								case azure.NetworkSecurityGroup:
+									stat.NetworkSecurityGroups = int(count)
+									aggregation.NetworkSecurityGroups += int(count)
+
 								case azure.Tenant:
 									// Do nothing. Only AzureDataQualityAggregation stats have tenant stats and the tenants stats are handled in the outer tenant loop
 								}

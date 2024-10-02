@@ -268,6 +268,14 @@ func (s *GraphTestContext) NewAzureSubscription(name, objectID, tenantID string)
 	}), azure.Entity, azure.Subscription)
 }
 
+func (s *GraphTestContext) NewAzureNetworkSecurityGroup(name, objectID, tenantID string) *graph.Node {
+	return s.NewNode(graph.AsProperties(graph.PropertyMap{
+		common.Name:     name,
+		common.ObjectID: objectID,
+		azure.TenantID:  tenantID,
+	}), azure.Entity, azure.NetworkSecurityGroup)
+}
+
 func (s *GraphTestContext) NewRelationship(startNode, endNode *graph.Node, kind graph.Kind, propertyBags ...*graph.Properties) *graph.Relationship {
 	var (
 		relationshipProperties = graph.NewPropertiesRed()

@@ -416,6 +416,11 @@ export interface AZVMInfo extends AZEntityInfo {
     inbound_object_control: number;
 }
 
+export interface AZNetworkSecurityGroupInfo extends AZEntityInfo {
+    props: BasicInfo;
+    inbound_object_control: number;
+}
+
 const ENTITY_INFO_OPEN = 'app/entityinfo/OPEN';
 const SET_SELECTED_NODE = 'app/entityinfo/SELECTED_NODE';
 

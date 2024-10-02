@@ -48,6 +48,7 @@ func GetDescendentKinds(kind graph.Kind) []graph.Kind {
 			azure.ServicePrincipal,
 			azure.Device,
 			azure.FunctionApp,
+			azure.NetworkSecurityGroup,
 		}
 
 	case azure.ManagementGroup:
@@ -64,6 +65,7 @@ func GetDescendentKinds(kind graph.Kind) []graph.Kind {
 			azure.AutomationAccount,
 			azure.KeyVault,
 			azure.FunctionApp,
+			azure.NetworkSecurityGroup,
 		}
 
 	case azure.ResourceGroup:
@@ -77,6 +79,7 @@ func GetDescendentKinds(kind graph.Kind) []graph.Kind {
 			azure.AutomationAccount,
 			azure.KeyVault,
 			azure.FunctionApp,
+			azure.NetworkSecurityGroup,
 		}
 
 	case azure.Subscription:
@@ -91,6 +94,7 @@ func GetDescendentKinds(kind graph.Kind) []graph.Kind {
 			azure.AutomationAccount,
 			azure.KeyVault,
 			azure.FunctionApp,
+			azure.NetworkSecurityGroup,
 		}
 	}
 

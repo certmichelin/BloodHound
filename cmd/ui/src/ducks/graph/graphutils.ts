@@ -236,6 +236,7 @@ const ICONS: { [id in GraphNodeTypes]: string } = {
     [GraphNodeTypes.NTAuthStore]: 'fa-store',
     [GraphNodeTypes.CertTemplate]: 'fa-id-card',
     [GraphNodeTypes.IssuancePolicy]: 'fa-clipboard-check',
+    [GraphNodeTypes.AZNetworkSecurityGroup]: 'fa-th-list',
 };
 
 const setFontIcons = (data: Items): void => {

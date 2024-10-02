@@ -258,6 +258,10 @@ func (s *BloodHoundGraphNode) SetIcon(nType string) {
 		s.FontIcon = &BloodHoundGraphFontIcon{
 			Text: "fa-clipboard-check",
 		}
+	case "AZNetworkSecurityGroup":
+		s.FontIcon = &BloodHoundGraphFontIcon{
+			Text: "fa-list",
+		}
 	case "Meta":
 		if tier, ok := s.Data["admintier"]; ok {
 			if tier.(int64) == 0 {
@@ -341,6 +345,8 @@ func (s *BloodHoundGraphNode) SetBackground(nType string) {
 		s.BloodHoundGraphItem.Color = "#B153F3"
 	case "Meta":
 		s.BloodHoundGraphItem.Color = "#000"
+	case "AZNetworkSecurityGroup":
+		s.BloodHoundGraphItem.Color = "#ED658C"
 	default:
 		s.BloodHoundGraphItem.Color = "#EEE"
 	}

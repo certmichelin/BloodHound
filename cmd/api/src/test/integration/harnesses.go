@@ -938,18 +938,19 @@ func (s *AZManagementGroupHarness) Setup(testCtx *GraphTestContext) {
 }
 
 type AZEntityPanelHarness struct {
-	Application      *graph.Node
-	Device           *graph.Node
-	Group            *graph.Node
-	ManagementGroup  *graph.Node
-	ResourceGroup    *graph.Node
-	KeyVault         *graph.Node
-	Role             *graph.Node
-	ServicePrincipal *graph.Node
-	Subscription     *graph.Node
-	Tenant           *graph.Node
-	User             *graph.Node
-	VM               *graph.Node
+	Application          *graph.Node
+	Device               *graph.Node
+	Group                *graph.Node
+	ManagementGroup      *graph.Node
+	ResourceGroup        *graph.Node
+	KeyVault             *graph.Node
+	Role                 *graph.Node
+	ServicePrincipal     *graph.Node
+	Subscription         *graph.Node
+	Tenant               *graph.Node
+	User                 *graph.Node
+	VM                   *graph.Node
+	NetworkSecurityGroup *graph.Node
 }
 
 func (s *AZEntityPanelHarness) Setup(testCtx *GraphTestContext) {
@@ -966,6 +967,7 @@ func (s *AZEntityPanelHarness) Setup(testCtx *GraphTestContext) {
 	s.Tenant = testCtx.NewAzureTenant(tenantID)
 	s.User = testCtx.NewAzureUser("User", "UserPrincipal", "Test User", RandomObjectID(testCtx.testCtx), "Licenses", tenantID, false)
 	s.VM = testCtx.NewAzureVM("VM", RandomObjectID(testCtx.testCtx), tenantID)
+	s.NetworkSecurityGroup = testCtx.NewAzureNetworkSecurityGroup("Network Security Group", RandomObjectID(testCtx.testCtx), tenantID)
 
 	// Application
 	testCtx.NewRelationship(s.User, s.Application, azure.Owner)
@@ -1003,6 +1005,9 @@ func (s *AZEntityPanelHarness) Setup(testCtx *GraphTestContext) {
 	testCtx.NewRelationship(s.Tenant, s.VM, azure.Contains)
 	testCtx.NewRelationship(s.User, s.VM, azure.Contributor)
 	testCtx.NewRelationship(s.Role, s.VM, azure.Contributor)
+
+	// Network Security Group
+	testCtx.NewRelationship(s.User, s.NetworkSecurityGroup, azure.Owns)
 }
 
 type AZMGApplicationReadWriteAllHarness struct {

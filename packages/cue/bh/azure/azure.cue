@@ -414,6 +414,12 @@ AutomationAccount: types.#Kind & {
 	representation: "AZAutomationAccount"
 }
 
+NetworkSecurityGroup: types.#Kind & {
+	symbol:         "NetworkSecurityGroup"
+	schema:         "azure"
+	representation: "AZNetworkSecurityGroup"
+}
+
 NodeKinds: [
 	Entity,
 	VMScaleSet,
@@ -435,6 +441,7 @@ NodeKinds: [
 	WebApp,
 	LogicApp,
 	AutomationAccount,
+	NetworkSecurityGroup,
 ]
 
 AvereContributor: types.#Kind & {

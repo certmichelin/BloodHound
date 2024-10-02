@@ -140,6 +140,8 @@ func getKindConverter(kind enums.Kind) func(json.RawMessage, *ConvertedAzureData
 		return convertAzureAutomationAccount
 	case enums.KindAZAutomationAccountRoleAssignment:
 		return convertAzureAutomationAccountRoleAssignment
+	case enums.KindAZNetworkSecurityGroup:
+		return convertAzureNetworkSecurityGroup
 	default:
 		// TODO: we should probably have a hook or something to log the unknown type
 		return func(rm json.RawMessage, cd *ConvertedAzureData) {}
@@ -704,5 +706,16 @@ func convertAzureAutomationAccountRoleAssignment(raw json.RawMessage, converted 
 		log.Errorf(SerialError, "azure automation account role assignments", err)
 	} else {
 		converted.RelProps = append(converted.RelProps, ein.ConvertAzureAutomationAccountRoleAssignment(data)...)
+	}
+}
+
+func convertAzureNetworkSecurityGroup(raw json.RawMessage, converted *ConvertedAzureData) {
+	var data models.NetworkSecurityGroup
+	if err := json.Unmarshal(raw, &data); err != nil {
+		log.Errorf(SerialError, "azure network security group", err)
+	} else {
+		node := ein.ConvertAzureNetworkSecurityGroup(data)
+		converted.NodeProps = append(converted.NodeProps, node)
+		// Modify this block to add relationships
 	}
 }

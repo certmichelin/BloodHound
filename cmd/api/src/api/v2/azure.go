@@ -47,26 +47,27 @@ const (
 	errParameterSkip              = errors.Error("invalid skip parameter")
 	errParameterRelatedEntityType = errors.Error("invalid related entity type")
 
-	entityTypeBase                = "az-base"
-	entityTypeUsers               = "users"
-	entityTypeGroups              = "groups"
-	entityTypeTenants             = "tenants"
-	entityTypeManagementGroups    = "management-groups"
-	entityTypeSubscriptions       = "subscriptions"
-	entityTypeResourceGroups      = "resource-groups"
-	entityTypeVMs                 = "vms"
-	entityTypeManagedClusters     = "managed-clusters"
-	entityTypeContainerRegistries = "container-registries"
-	entityTypeWebApps             = "web-apps"
-	entityTypeLogicApps           = "logic-apps"
-	entityTypeAutomationAccounts  = "automation-accounts"
-	entityTypeKeyVaults           = "key-vaults"
-	entityTypeDevices             = "devices"
-	entityTypeApplications        = "applications"
-	entityTypeVMScaleSets         = "vm-scale-sets"
-	entityTypeServicePrincipals   = "service-principals"
-	entityTypeRoles               = "roles"
-	entityTypeFunctionApps        = "function-apps"
+	entityTypeBase                  = "az-base"
+	entityTypeUsers                 = "users"
+	entityTypeGroups                = "groups"
+	entityTypeTenants               = "tenants"
+	entityTypeManagementGroups      = "management-groups"
+	entityTypeSubscriptions         = "subscriptions"
+	entityTypeResourceGroups        = "resource-groups"
+	entityTypeVMs                   = "vms"
+	entityTypeManagedClusters       = "managed-clusters"
+	entityTypeContainerRegistries   = "container-registries"
+	entityTypeWebApps               = "web-apps"
+	entityTypeLogicApps             = "logic-apps"
+	entityTypeAutomationAccounts    = "automation-accounts"
+	entityTypeKeyVaults             = "key-vaults"
+	entityTypeDevices               = "devices"
+	entityTypeApplications          = "applications"
+	entityTypeVMScaleSets           = "vm-scale-sets"
+	entityTypeServicePrincipals     = "service-principals"
+	entityTypeRoles                 = "roles"
+	entityTypeFunctionApps          = "function-apps"
+	entityTypeNetworkSecurityGroups = "network-security-group"
 )
 
 func graphRelatedEntityType(ctx context.Context, db graph.Database, entityType, objectID string, request *http.Request) (any, int, *api.ErrorWrapper) {
@@ -81,7 +82,7 @@ func graphRelatedEntityType(ctx context.Context, db graph.Database, entityType, 
 		azure.RelatedEntityTypeDescendentContainerRegistries,
 		azure.RelatedEntityTypeDescendentWebApps,
 		azure.RelatedEntityTypeDescendentAutomationAccounts,
-		azure.RelatedEntityTypeDescendentLogicApps, azure.RelatedEntityTypeDescendentFunctionApps:
+		azure.RelatedEntityTypeDescendentLogicApps, azure.RelatedEntityTypeDescendentFunctionApps /*,azure.RelatedEntityTypesDescandentNetworkSecurityGroups*/ :
 		if descendents, err := azure.ListEntityDescendentPaths(ctx, db, relatedEntityType, objectID); err != nil {
 			return nil, 0, api.BuildErrorResponse(http.StatusInternalServerError, fmt.Sprintf("error fetching related entity type %s: %v", entityType, err), request)
 		} else {
@@ -387,6 +388,9 @@ func GetAZEntityInformation(ctx context.Context, db graph.Database, entityType, 
 
 	case entityTypeFunctionApps:
 		return azure.FunctionAppEntityDetails(ctx, db, objectID, hydrateCounts)
+
+	case entityTypeNetworkSecurityGroups:
+		return azure.NetworkSecurityGroupEntityDetails(ctx, db, objectID, hydrateCounts)
 
 	default:
 		return nil, fmt.Errorf("unknown azure entity %s", entityType)
