@@ -21,9 +21,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bloodhoundad/azurehound/v2/enums"
-	"github.com/bloodhoundad/azurehound/v2/models"
-	azureModels "github.com/bloodhoundad/azurehound/v2/models/azure"
+	"github.com/certmichelin/azurehound/v3/enums"
+	"github.com/certmichelin/azurehound/v3/models"
+	azureModels "github.com/certmichelin/azurehound/v3/models/azure"
 	"github.com/specterops/bloodhound/ein"
 	"github.com/specterops/bloodhound/graphschema/azure"
 	"github.com/specterops/bloodhound/log"

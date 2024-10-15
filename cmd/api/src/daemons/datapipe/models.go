@@ -19,7 +19,7 @@ package datapipe
 import (
 	"encoding/json"
 
-	"github.com/bloodhoundad/azurehound/v2/enums"
+	"github.com/certmichelin/azurehound/v3/enums"
 	"github.com/specterops/bloodhound/ein"
 )
 

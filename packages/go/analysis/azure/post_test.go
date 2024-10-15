@@ -21,7 +21,7 @@ import (
 	"testing"
 
 	"github.com/RoaringBitmap/roaring"
-	"github.com/bloodhoundad/azurehound/v2/constants"
+	"github.com/certmichelin/azurehound/v3/constants"
 	"github.com/specterops/bloodhound/dawgs/graph"
 	graph_mocks "github.com/specterops/bloodhound/dawgs/graph/mocks"
 	"github.com/specterops/bloodhound/dawgs/util/size"

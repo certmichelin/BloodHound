@@ -20,7 +20,7 @@ go 1.23
 
 require (
 	github.com/beevik/etree v1.2.0
-	github.com/bloodhoundad/azurehound/v2 v2.0.1
+	github.com/certmichelin/azurehound/v3 v3.0.1
 	github.com/channelmeter/iso8601duration v0.0.0-20150204201828-8da3af7a2a61
 	github.com/crewjam/saml v0.4.14
 	github.com/didip/tollbooth/v6 v6.1.2

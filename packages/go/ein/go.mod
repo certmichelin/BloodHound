@@ -18,11 +18,11 @@ module github.com/specterops/bloodhound/ein
 
 go 1.23
 
-require github.com/bloodhoundad/azurehound/v2 v2.0.1
+require github.com/certmichelin/azurehound/v3 v3.0.1
 
 require (
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 )
 
-replace github.com/bloodhoundad/azurehound/v2 v2.0.1 => ../../../../AzureHound
+// replace github.com/certmichelin/azurehound/v3 v3.0.1 => ../../../../AzureHound
