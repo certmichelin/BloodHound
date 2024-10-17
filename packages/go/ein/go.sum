@@ -1,5 +1,5 @@
-github.com/certmichelin/azurehound/v3 v3.0.1 h1:gjhksDzuFOtPOBdfApeze8Bg9gjRTT10k3THZiZ9xeU=
-github.com/certmichelin/azurehound/v3 v3.0.1/go.mod h1:GGsipU6kX7KtDKlDzrUp7ZCgkejSVZM3MvvDg2+kNoc=
+github.com/certmichelin/azurehound/v3 v3.0.2 h1:nTewtDfxIXE8EFVzbYSt8s1iVeHRkcrCdgSjLH31GDs=
+github.com/certmichelin/azurehound/v3 v3.0.2/go.mod h1:GGsipU6kX7KtDKlDzrUp7ZCgkejSVZM3MvvDg2+kNoc=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gofrs/uuid v4.4.0+incompatible h1:3qXRTX8/NbyulANqlc0lchS1gqAVxRgsuW1YrTJupqA=

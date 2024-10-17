@@ -20,7 +20,7 @@ go 1.23
 
 require (
 	github.com/RoaringBitmap/roaring v1.3.0
-	github.com/certmichelin/azurehound/v3 v3.0.1
+	github.com/certmichelin/azurehound/v3 v3.0.2
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/mock v0.2.0
 )
