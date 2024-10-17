@@ -1007,6 +1007,7 @@ func (s *AZEntityPanelHarness) Setup(testCtx *GraphTestContext) {
 	testCtx.NewRelationship(s.Role, s.VM, azure.Contributor)
 
 	// Network Security Group
+	testCtx.NewRelationship(s.Tenant, s.NetworkSecurityGroup, azure.Owns)
 	testCtx.NewRelationship(s.User, s.NetworkSecurityGroup, azure.Owns)
 }
 

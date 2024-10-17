@@ -714,8 +714,8 @@ func convertAzureNetworkSecurityGroup(raw json.RawMessage, converted *ConvertedA
 	if err := json.Unmarshal(raw, &data); err != nil {
 		log.Errorf(SerialError, "azure network security group", err)
 	} else {
-		node := ein.ConvertAzureNetworkSecurityGroup(data)
+		node, rel := ein.ConvertAzureNetworkSecurityGroup(data)
 		converted.NodeProps = append(converted.NodeProps, node)
-		// Modify this block to add relationships
+		converted.RelProps = append(converted.RelProps, rel)
 	}
 }

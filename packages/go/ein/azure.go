@@ -1805,15 +1805,29 @@ func ConvertAzureAutomationAccount(account models.AutomationAccount) (Ingestible
 	return node, relationships
 }
 
-func ConvertAzureNetworkSecurityGroup(data models.NetworkSecurityGroup) IngestibleNode {
+func ConvertAzureNetworkSecurityGroup(data models.NetworkSecurityGroup) (IngestibleNode, IngestibleRelationship) {
 	return IngestibleNode{
-		ObjectID: strings.ToUpper(data.Id),
-		PropertyMap: map[string]any{
-			common.Name.String():    strings.ToUpper(data.Name),
-			azure.TenantID.String(): strings.ToUpper(data.TenantId),
+			ObjectID: strings.ToUpper(data.Id),
+			PropertyMap: map[string]any{
+				common.Name.String():    strings.ToUpper(data.Name),
+				azure.TenantID.String(): strings.ToUpper(data.TenantId),
+			},
+			Label: azure.NetworkSecurityGroup,
 		},
-		Label: azure.NetworkSecurityGroup,
-	}
+		NewIngestibleRelationship(
+			IngestibleSource{
+				Source:     strings.ToUpper(data.TenantId),
+				SourceType: azure.Tenant,
+			},
+			IngestibleTarget{
+				TargetType: azure.NetworkSecurityGroup,
+				Target:     strings.ToUpper(data.Id),
+			},
+			IngestibleRel{
+				RelProps: map[string]any{},
+				RelType:  azure.Contains,
+			},
+		)
 }
 
 func CanAddSecret(roleDefinitionId string) bool {

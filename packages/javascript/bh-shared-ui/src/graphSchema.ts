@@ -679,6 +679,7 @@ export enum AzureNodeKind {
     WebApp = 'AZWebApp',
     LogicApp = 'AZLogicApp',
     AutomationAccount = 'AZAutomationAccount',
+    NetworkSecuritygroup = 'AZNetworkSecurityGroup',
 }
 export function AzureNodeKindToDisplay(value: AzureNodeKind): string | undefined {
     switch (value) {
@@ -722,6 +723,8 @@ export function AzureNodeKindToDisplay(value: AzureNodeKind): string | undefined
             return 'LogicApp';
         case AzureNodeKind.AutomationAccount:
             return 'AutomationAccount';
+        case AzureNodeKind.NetworkSecuritygroup:
+            return 'NetworkSecurityGroup';
         default:
             return undefined;
     }
