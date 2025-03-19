@@ -41,6 +41,7 @@ export const createAssetGroupLabels = (count: number = 10) => {
             deleted_at: faker.date.past().toISOString(),
             deleted_by: faker.internet.email(),
             count: faker.datatype.number(),
+            require_certify: faker.datatype.boolean(),
         });
     }
 
