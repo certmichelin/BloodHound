@@ -20,7 +20,7 @@ import fileDownload from 'js-file-download';
 import { useDispatch } from 'react-redux';
 import { addSnackbar } from 'src/ducks/global/actions';
 import { useGetCollectorsByType } from 'src/hooks/useCollectors';
-import { CollectorType } from 'js-client-library';
+import { CommunityCollectorType } from 'js-client-library';
 
 const DownloadCollectors = () => {
     /* Hooks */
@@ -30,7 +30,7 @@ const DownloadCollectors = () => {
     const azureHoundCollectorsQuery = useGetCollectorsByType('azurehound');
 
     /* Event Handlers */
-    const downloadCollector = (collectorType: CollectorType, version: string) => {
+    const downloadCollector = (collectorType: CommunityCollectorType, version: string) => {
         apiClient
             .downloadCollector(collectorType, version)
             .then((res: any) => {
@@ -47,7 +47,7 @@ const DownloadCollectors = () => {
             });
     };
 
-    const downloadCollectorChecksum = (collectorType: CollectorType, version: string) => {
+    const downloadCollectorChecksum = (collectorType: CommunityCollectorType, version: string) => {
         apiClient
             .downloadCollectorChecksum(collectorType, version)
             .then((res: any) => {
@@ -110,8 +110,8 @@ const DownloadCollectors = () => {
                     ) : (
                         <CollectorCardList
                                     noLabels
-                                    collectors={sharpHoundCollectorsQuery.data!.data.versions.map((collector) => ({
-                                        collectorType: 'sharphound' as const,
+                                    collectorType='sharphound' as const
+                                    collectors={sharpHoundCollectorsQuery.data?.data.versions.map((collector) => ({
                                         version: collector.version,
                                         downloadArtifacts: [
                                             {
@@ -147,17 +147,17 @@ const DownloadCollectors = () => {
                     ) : (
                         <CollectorCardList
                                     noLabels
-                                    collectors={sharpHoundCollectorsQuery.data!.data.versions.map((collector) => ({
-                                        collectorType: 'sharphound' as const,
+                                    collectorType='azurehound' as const
+                                    collectors={azureHoundCollectorsQuery.data?.data.versions.map((collector) => ({
                                         version: collector.version,
                                         downloadArtifacts: [
                                             {
                                                 os: 'windows',
                                                 arch: 'x86',
                                                 onClickDownload: () =>
-                                                    downloadCollector('sharphound', collector.version),
+                                                    downloadCollector('azurehound', collector.version),
                                                 onClickDownloadChecksum: () =>
-                                                    downloadCollectorChecksum('sharphound', collector.version),
+                                                    downloadCollectorChecksum('azurehound', collector.version),
                                             },
                                         ],
                                     }))}
