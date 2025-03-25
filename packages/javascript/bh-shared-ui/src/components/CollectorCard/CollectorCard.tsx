@@ -20,15 +20,13 @@ import { CollectorType } from 'js-client-library';
 import React from 'react';
 import { cn } from '../../utils';
 
-export type LabelType = 'latest' | 'prerelease';
-
 export const COLLECTOR_TYPE_LABEL: { [key in CollectorType]: string } = {
     sharphound_enterprise: 'SharpHound Enterprise',
     sharphound: 'SharpHound Community',
     azurehound: 'AzureHound',
 };
 
-interface CollectorDownloadFile {
+export interface CollectorDownloadFile {
     displayName: string;
     os: string;
     arch: string;
@@ -36,12 +34,12 @@ interface CollectorDownloadFile {
     onClickDownloadChecksum: () => void;
 }
 
-interface CollectorCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CollectorCardProps extends React.HTMLAttributes<HTMLDivElement> {
     collectorType: CollectorType;
     version: string;
     downloadArtifacts: CollectorDownloadFile[];
     timestamp?: number;
-    label?: LabelType;
+    label?: string;
     isPrerelease?: boolean;
 }
 
@@ -104,7 +102,7 @@ const CollectorCard: React.FC<CollectorCardProps> = ({
 };
 
 interface CollectorLabelProps {
-    label: LabelType;
+    label: string;
     isPrerelease?: boolean;
 }
 
