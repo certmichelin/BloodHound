@@ -27,18 +27,18 @@ import { DetailsList } from './DetailsList';
 import DynamicDetails from './DynamicDetails';
 import EntityInfoPanel from './EntityInfo/EntityInfoPanel';
 import { MembersList } from './MembersList';
+import ObjectCountPanel from './ObjectCountPanel';
 
 const innerDetail = (
     selectedObjectId: number | null,
     selectedSelectorId: number | null,
     selectedLabelId: number,
-    objectsList: SelectorNode[],
+    selectedObjectData: SelectorNode | null,
     labelsList: AssetLabel[],
     selectorsList: AssetSelector[]
 ): SelectedDetailsProps => {
-    if (selectedObjectId !== null) {
-        const selectedObject = objectsList.find((object) => object.id === selectedObjectId);
-        return { id: selectedObjectId, type: 'object', data: selectedObject };
+    if (selectedObjectId !== null && selectedObjectData !== null) {
+        return { id: selectedObjectId, type: 'object', data: selectedObjectData };
     }
 
     if (selectedSelectorId !== null) {
@@ -55,21 +55,19 @@ type SelectedDetailsProps = {
     id: number;
     data?: SelectorNode | AssetLabel | AssetSelector;
     cypher?: boolean;
+    objectsCount?: any;
+    // objectsCount?:{
+    //     total_count: number;
+    //     counts: Record<string, number>;
+    // };
 };
 
-// const isSelector = (data: any): data is AssetSelector => {
-//     return 'seeds' in data;
-// };
-
-// const isLabel = (data: any): data is AssetLabel => {
-//     return 'asset_group_tier_id' in data;
-// };
 const isObject = (data: any): data is SelectorNode => {
     const objectData = data || {};
     return 'node_id' in objectData;
 };
 
-const SelectedDetails: FC<SelectedDetailsProps> = ({ type, cypher, data }) => {
+const SelectedDetails: FC<SelectedDetailsProps> = ({ type, cypher, data, objectsCount }) => {
     if (isObject(data)) {
         const selectedNode = {
             id: data.node_id.toString(),
@@ -79,7 +77,6 @@ const SelectedDetails: FC<SelectedDetailsProps> = ({ type, cypher, data }) => {
         return (
             <>
                 <EntityInfoPanel selectedNode={selectedNode} />
-                {/* <div>{`Object Info Panel - ${type}-${id}`}</div> */}
             </>
         );
     }
@@ -96,7 +93,7 @@ const SelectedDetails: FC<SelectedDetailsProps> = ({ type, cypher, data }) => {
             return (
                 <>
                     <DynamicDetails data={data} />
-                    {/* <ObjectCountPanel /> */}
+                    <ObjectCountPanel data={objectsCount} />
                 </>
             );
     }
@@ -104,8 +101,7 @@ const SelectedDetails: FC<SelectedDetailsProps> = ({ type, cypher, data }) => {
     return (
         <>
             <DynamicDetails data={data} />
-            {/* <div>{`Dynamic Details - ${type}-${id}`}</div> */}
-            {/* <ObjectCountPanel /> */}
+            <ObjectCountPanel data={objectsCount} />
         </>
     );
 };
@@ -114,6 +110,7 @@ const Details: FC = () => {
     const [selectedTier, setSelectedTier] = useState(1);
     const [selectedSelector, setSelectedSelector] = useState<number | null>(null);
     const [selectedObject, setSelectedObject] = useState<number | null>(null);
+    const [selectedObjectData, setSelectedObjectData] = useState<SelectorNode | null>(null);
     const [showCypher, setShowCypher] = useState(false);
     const navigate = useNavigate();
 
@@ -126,6 +123,12 @@ const Details: FC = () => {
     const selectorsQuery = useQuery(['asset-group-selectors', selectedTier], () => {
         return apiClient.getAssetGroupSelectors(selectedTier).then((res) => {
             return res.data.data['selectors'];
+        });
+    });
+
+    const objectsCount = useQuery(['asset-group-labels-count'], () => {
+        return apiClient.getAssetGroupMembersCounts(selectedTier).then((res) => {
+            return res.data.data;
         });
     });
 
@@ -149,7 +152,7 @@ const Details: FC = () => {
         selectedObject,
         selectedSelector,
         selectedTier,
-        [],
+        selectedObjectData,
         labelsQuery.data || [],
         selectorsQuery.data || []
     );
@@ -253,9 +256,10 @@ const Details: FC = () => {
                     <div className='min-h-96 grow-0 basis-1/3'>
                         <MembersList
                             itemCount={objectsQuery.data || 1000}
-                            onClick={(id) => {
+                            onClick={(id, data) => {
                                 setSelectedObject(id);
                                 setShowCypher(false);
+                                setSelectedObjectData(data);
                             }}
                             selected={selectedObject}
                             selectedSelector={selectedSelector}
@@ -264,7 +268,7 @@ const Details: FC = () => {
                     </div>
                 </div>
                 <div className='flex flex-col basis-1/3'>
-                    <SelectedDetails type={type} id={id} cypher={showCypher} data={data} />
+                    <SelectedDetails type={type} id={id} cypher={showCypher} data={data} objectsCount={objectsCount} />
                 </div>
             </div>
         </div>

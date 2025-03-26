@@ -87,6 +87,7 @@ export interface AssetLabel extends Created, Updated, Deleted {
     description: string;
     count: number;
     require_certify: boolean;
+    position: number | null;
 }
 
 export type SeedTypeValues = 0 | 1;

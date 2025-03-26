@@ -15,6 +15,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Button } from '@bloodhoundenterprise/doodleui';
+import { SelectorNode } from 'js-client-library';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
@@ -40,7 +41,7 @@ const Row = ({
 }: ListChildComponentProps<{
     selected: number | null;
     title: string;
-    onClick: (id: number) => void;
+    onClick: (id: number, data: SelectorNode) => void;
     items: any;
 }>) => {
     const { items, onClick, selected, title } = data;
@@ -61,7 +62,7 @@ const Row = ({
                 variant={'text'}
                 className='flex justify-start w-full'
                 onClick={() => {
-                    onClick(listItem.id);
+                    onClick(listItem.id, listItem);
                 }}>
                 <NodeIcon nodeType={listItem.kind || 'Unknown'} />
                 <span className='text-base ml-2'>{listItem.name}</span>
@@ -109,7 +110,7 @@ interface MembersListProps {
     selectedTier: number;
     selectedSelector: number | null;
     selected: number | null;
-    onClick: (id: number) => void;
+    onClick: (id: number, data: SelectorNode) => void;
     itemCount: number;
 }
 
