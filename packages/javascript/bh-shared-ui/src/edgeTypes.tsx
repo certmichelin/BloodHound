@@ -114,7 +114,7 @@ export const AllEdgeTypes: Category[] = [
                 ],
             },
             {
-                name: 'Inter-forest Trust Abuse',
+                name: 'Cross Forest Trust Abuse',
                 edgeTypes: [
                     ActiveDirectoryRelationshipKind.SpoofSIDHistory,
                     ActiveDirectoryRelationshipKind.AbuseTGTDelegation,

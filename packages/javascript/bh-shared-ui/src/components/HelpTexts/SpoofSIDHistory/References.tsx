@@ -37,8 +37,8 @@ const References: FC = () => {
             <Link
                 target='_blank'
                 rel='noopener'
-                href='Active Directory forest trusts part 1 - How does SID filtering work?'>
-                How SID History can be used to elevate privileges
+                href='https://dirkjanm.io/active-directory-forest-trusts-part-one-how-does-sid-filtering-work/'>
+                Active Directory forest trusts part 1 - How does SID filtering work?
             </Link>
             <br />
             <Link target='_blank' rel='noopener' href='https://attack.mitre.org/techniques/T1134/005/'>
