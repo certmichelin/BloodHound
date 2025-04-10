@@ -32,6 +32,7 @@ var (
 	Device                               = graph.StringKind("AZDevice")
 	FunctionApp                          = graph.StringKind("AZFunctionApp")
 	Group                                = graph.StringKind("AZGroup")
+	Group365                             = graph.StringKind("AZGroup365")
 	KeyVault                             = graph.StringKind("AZKeyVault")
 	ManagementGroup                      = graph.StringKind("AZManagementGroup")
 	ResourceGroup                        = graph.StringKind("AZResourceGroup")
@@ -53,6 +54,7 @@ var (
 	GetSecrets                           = graph.StringKind("AZGetSecrets")
 	HasRole                              = graph.StringKind("AZHasRole")
 	MemberOf                             = graph.StringKind("AZMemberOf")
+	M365MemberOf                         = graph.StringKind("AZM365MemberOf")
 	Owner                                = graph.StringKind("AZOwner")
 	RunsAs                               = graph.StringKind("AZRunsAs")
 	VMContributor                        = graph.StringKind("AZVMContributor")
@@ -129,10 +131,12 @@ const (
 	PublisherDomain         Property = "publisherdomain"
 	SignInAudience          Property = "signinaudience"
 	RoleTemplateID          Property = "templateid"
+	Visibility              Property = "visibility"
+	Mail                    Property = "mail"
 )
 
 func AllProperties() []Property {
-	return []Property{AppOwnerOrganizationID, AppDescription, AppDisplayName, ServicePrincipalType, UserType, TenantID, ServicePrincipalID, ServicePrincipalNames, OperatingSystemVersion, TrustType, IsBuiltIn, AppID, AppRoleID, DeviceID, NodeResourceGroupID, OnPremID, OnPremSyncEnabled, SecurityEnabled, SecurityIdentifier, EnableRBACAuthorization, Scope, Offer, MFAEnabled, License, Licenses, LoginURL, MFAEnforced, UserPrincipalName, IsAssignableToRole, PublisherDomain, SignInAudience, RoleTemplateID}
+	return []Property{AppOwnerOrganizationID, AppDescription, AppDisplayName, ServicePrincipalType, UserType, TenantID, ServicePrincipalID, ServicePrincipalNames, OperatingSystemVersion, TrustType, IsBuiltIn, AppID, AppRoleID, DeviceID, NodeResourceGroupID, OnPremID, OnPremSyncEnabled, SecurityEnabled, SecurityIdentifier, EnableRBACAuthorization, Scope, Offer, MFAEnabled, License, Licenses, LoginURL, MFAEnforced, UserPrincipalName, IsAssignableToRole, PublisherDomain, SignInAudience, RoleTemplateID, Visibility, Mail}
 }
 func ParseProperty(source string) (Property, error) {
 	switch source {
@@ -200,6 +204,10 @@ func ParseProperty(source string) (Property, error) {
 		return SignInAudience, nil
 	case "templateid":
 		return RoleTemplateID, nil
+	case "visibility":
+		return Visibility, nil
+	case "mail":
+		return Mail, nil
 	default:
 		return "", errors.New("Invalid enumeration value: " + source)
 	}
@@ -270,6 +278,10 @@ func (s Property) String() string {
 		return string(SignInAudience)
 	case RoleTemplateID:
 		return string(RoleTemplateID)
+	case Visibility:
+		return string(Visibility)
+	case Mail:
+		return string(Mail)
 	default:
 		return "Invalid enumeration case: " + string(s)
 	}
@@ -340,6 +352,10 @@ func (s Property) Name() string {
 		return "Sign In Audience"
 	case RoleTemplateID:
 		return "Role Template ID"
+	case Visibility:
+		return "Visibility"
+	case Mail:
+		return "M365 Group Mail"
 	default:
 		return "Invalid enumeration case: " + string(s)
 	}
@@ -353,7 +369,7 @@ func (s Property) Is(others ...graph.Kind) bool {
 	return false
 }
 func Relationships() []graph.Kind {
-	return []graph.Kind{AvereContributor, Contains, Contributor, GetCertificates, GetKeys, GetSecrets, HasRole, MemberOf, Owner, RunsAs, VMContributor, AutomationContributor, KeyVaultContributor, VMAdminLogin, AddMembers, AddSecret, ExecuteCommand, GlobalAdmin, PrivilegedAuthAdmin, Grant, GrantSelf, PrivilegedRoleAdmin, ResetPassword, UserAccessAdministrator, Owns, ScopedTo, CloudAppAdmin, AppAdmin, AddOwner, ManagedIdentity, ApplicationReadWriteAll, AppRoleAssignmentReadWriteAll, DirectoryReadWriteAll, GroupReadWriteAll, GroupMemberReadWriteAll, RoleManagementReadWriteDirectory, ServicePrincipalEndpointReadWriteAll, AKSContributor, NodeResourceGroup, WebsiteContributor, LogicAppContributor, AZMGAddMember, AZMGAddOwner, AZMGAddSecret, AZMGGrantAppRoles, AZMGGrantRole, SyncedToADUser}
+	return []graph.Kind{AvereContributor, Contains, Contributor, GetCertificates, GetKeys, GetSecrets, HasRole, MemberOf, M365MemberOf, Owner, RunsAs, VMContributor, AutomationContributor, KeyVaultContributor, VMAdminLogin, AddMembers, AddSecret, ExecuteCommand, GlobalAdmin, PrivilegedAuthAdmin, Grant, GrantSelf, PrivilegedRoleAdmin, ResetPassword, UserAccessAdministrator, Owns, ScopedTo, CloudAppAdmin, AppAdmin, AddOwner, ManagedIdentity, ApplicationReadWriteAll, AppRoleAssignmentReadWriteAll, DirectoryReadWriteAll, GroupReadWriteAll, GroupMemberReadWriteAll, RoleManagementReadWriteDirectory, ServicePrincipalEndpointReadWriteAll, AKSContributor, NodeResourceGroup, WebsiteContributor, LogicAppContributor, AZMGAddMember, AZMGAddOwner, AZMGAddSecret, AZMGGrantAppRoles, AZMGGrantRole, SyncedToADUser}
 }
 func AppRoleTransitRelationshipKinds() []graph.Kind {
 	return []graph.Kind{AZMGAddMember, AZMGAddOwner, AZMGAddSecret, AZMGGrantAppRoles, AZMGGrantRole}
@@ -368,8 +384,8 @@ func ExecutionPrivileges() []graph.Kind {
 	return []graph.Kind{VMAdminLogin, VMContributor, AvereContributor, WebsiteContributor, Contributor, ExecuteCommand}
 }
 func PathfindingRelationships() []graph.Kind {
-	return []graph.Kind{AvereContributor, Contributor, GetCertificates, GetKeys, GetSecrets, HasRole, MemberOf, Owner, RunsAs, VMContributor, AutomationContributor, KeyVaultContributor, VMAdminLogin, AddMembers, AddSecret, ExecuteCommand, GlobalAdmin, PrivilegedAuthAdmin, Grant, GrantSelf, PrivilegedRoleAdmin, ResetPassword, UserAccessAdministrator, Owns, CloudAppAdmin, AppAdmin, AddOwner, ManagedIdentity, AKSContributor, NodeResourceGroup, WebsiteContributor, LogicAppContributor, AZMGAddMember, AZMGAddOwner, AZMGAddSecret, AZMGGrantAppRoles, AZMGGrantRole, SyncedToADUser, Contains}
+	return []graph.Kind{AvereContributor, Contributor, GetCertificates, GetKeys, GetSecrets, HasRole, MemberOf, M365MemberOf, Owner, RunsAs, VMContributor, AutomationContributor, KeyVaultContributor, VMAdminLogin, AddMembers, AddSecret, ExecuteCommand, GlobalAdmin, PrivilegedAuthAdmin, Grant, GrantSelf, PrivilegedRoleAdmin, ResetPassword, UserAccessAdministrator, Owns, CloudAppAdmin, AppAdmin, AddOwner, ManagedIdentity, AKSContributor, NodeResourceGroup, WebsiteContributor, LogicAppContributor, AZMGAddMember, AZMGAddOwner, AZMGAddSecret, AZMGGrantAppRoles, AZMGGrantRole, SyncedToADUser, Contains}
 }
 func NodeKinds() []graph.Kind {
-	return []graph.Kind{Entity, VMScaleSet, App, Role, Device, FunctionApp, Group, KeyVault, ManagementGroup, ResourceGroup, ServicePrincipal, Subscription, Tenant, User, VM, ManagedCluster, ContainerRegistry, WebApp, LogicApp, AutomationAccount}
+	return []graph.Kind{Entity, VMScaleSet, App, Role, Device, FunctionApp, Group, Group365, KeyVault, ManagementGroup, ResourceGroup, ServicePrincipal, Subscription, Tenant, User, VM, ManagedCluster, ContainerRegistry, WebApp, LogicApp, AutomationAccount}
 }

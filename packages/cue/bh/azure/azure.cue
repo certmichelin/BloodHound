@@ -254,6 +254,21 @@ TenantID: types.#StringEnum & {
 	representation: "tenantid"
 }
 
+Visibility: types.#StringEnum & {
+	symbol:         "Visibility"
+	schema:         "azure"
+	name:           "Visibility"
+	representation: "visibility"
+}
+
+M365GroupMail: types.#StringEnum & {
+	symbol:         "Mail"
+	schema:         "azure"
+	name:           "M365 Group Mail"
+	representation: "mail"
+}
+
+
 Properties: [
 	AppOwnerOrganizationID,
 	AppDescription,
@@ -287,6 +302,8 @@ Properties: [
 	PublisherDomain,
 	SignInAudience,
 	RoleTemplateID,
+	Visibility,
+	M365GroupMail,
 ]
 
 // Kinds
@@ -330,6 +347,12 @@ Group: types.#Kind & {
 	symbol:         "Group"
 	schema:         "azure"
 	representation: "AZGroup"
+}
+
+Group365: types.#Kind & {
+	symbol:         "Group365"
+	schema:         "azure"
+	representation: "AZGroup365"
 }
 
 KeyVault: types.#Kind & {
@@ -418,6 +441,7 @@ NodeKinds: [
 	Device,
 	FunctionApp,
 	Group,
+	Group365,
 	KeyVault,
 	ManagementGroup,
 	ResourceGroup,
@@ -595,6 +619,12 @@ Owns: types.#Kind & {
 	representation: "AZOwns"
 }
 
+M365MemberOf: types.#Kind & {
+	symbol:         "M365MemberOf"
+	schema:         "azure"
+	representation: "AZM365MemberOf"
+}
+
 ScopedTo: types.#Kind & {
 	symbol:         "ScopedTo"
 	schema:         "azure"
@@ -736,6 +766,7 @@ RelationshipKinds: [
 	GetSecrets,
 	HasRole,
 	MemberOf,
+	M365MemberOf,
 	Owner,
 	RunsAs,
 	VMContributor,
@@ -844,6 +875,7 @@ InboundOutboundRelationshipKinds: [
 	GetSecrets,
 	HasRole,
 	MemberOf,
+	M365MemberOf,
 	Owner,
 	RunsAs,
 	VMContributor,
