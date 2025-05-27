@@ -888,6 +888,7 @@ export enum AzureRelationshipKind {
     AZMGGrantAppRoles = 'AZMGGrantAppRoles',
     AZMGGrantRole = 'AZMGGrantRole',
     SyncedToADUser = 'SyncedToADUser',
+    WorkWith = 'AZUserInteraction',
 }
 export function AzureRelationshipKindToDisplay(value: AzureRelationshipKind): string | undefined {
     switch (value) {
@@ -985,6 +986,8 @@ export function AzureRelationshipKindToDisplay(value: AzureRelationshipKind): st
             return 'AZMGGrantRole';
         case AzureRelationshipKind.SyncedToADUser:
             return 'SyncedToADUser';
+        case AzureRelationshipKind.WorkWith: 
+            return 'WorkWith';
         default:
             return undefined;
     }
@@ -1019,6 +1022,7 @@ export enum AzureKindProperties {
     LoginURL = 'loginurl',
     MFAEnforced = 'mfaenforced',
     UserPrincipalName = 'userprincipalname',
+    UserDepartment = 'userdepartment',
     IsAssignableToRole = 'isassignabletorole',
     PublisherDomain = 'publisherdomain',
     SignInAudience = 'signinaudience',
@@ -1082,6 +1086,8 @@ export function AzureKindPropertiesToDisplay(value: AzureKindProperties): string
             return 'MFA Enforced';
         case AzureKindProperties.UserPrincipalName:
             return 'User Principal Name';
+        case AzureKindProperties.UserDepartment:
+            return 'User Department';
         case AzureKindProperties.IsAssignableToRole:
             return 'Is Role Assignable';
         case AzureKindProperties.PublisherDomain:
@@ -1134,6 +1140,7 @@ export function AzurePathfindingEdges(): AzureRelationshipKind[] {
         AzureRelationshipKind.AZMGGrantAppRoles,
         AzureRelationshipKind.AZMGGrantRole,
         AzureRelationshipKind.SyncedToADUser,
+        AzureRelationshipKind.WorkWith,
         AzureRelationshipKind.Contains,
     ];
 }

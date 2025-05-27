@@ -479,6 +479,53 @@ func ConvertAzureGroupMembersToRels(data models.GroupMembers) []IngestibleRelati
 	return relationships
 }
 
+func ConvertAzureInteractionToRels(data models.UsersInteractions) ([]IngestibleRelationship, []IngestibleNode) {
+	relationships := make([]IngestibleRelationship, 0)
+	updateNodes := make([]IngestibleNode, 0)
+
+	for _, raw := range data.Users {
+		var (
+			user azure2.DirectoryObject
+		)
+		if err := json.Unmarshal(raw.User, &user); err != nil {
+			slog.Error(fmt.Sprintf(SerialError, "azure user interaction", err))
+		} else if userType, err := ExtractTypeFromDirectoryObject(user); errors.Is(err, ErrInvalidType) {
+			slog.Warn(fmt.Sprintf(ExtractError, err))
+		} else if err != nil {
+			slog.Error(fmt.Sprintf(ExtractError, err))
+		} else {
+			relationships = append(relationships, NewIngestibleRelationship(
+				IngestibleSource{
+					Source:     strings.ToUpper(data.UserId),
+					SourceType: azure.User,
+				},
+				IngestibleTarget{
+					TargetType: userType,
+					Target:     strings.ToUpper(user.Id),
+				},
+				IngestibleRel{
+					RelProps: map[string]any{},
+					RelType:  azure.WorkWith,
+				},
+			))
+			var userMap map[string]any
+			var department any
+			if err := json.Unmarshal(raw.User, &userMap); err == nil {
+				department = userMap["department"]
+			}
+			updateNodes = append(updateNodes, IngestibleNode{
+				ObjectID: strings.ToUpper(user.Id),
+				PropertyMap: map[string]any{
+					azure.UserDepartment.String(): department,
+				},
+				Label: azure.User,
+			})
+		}
+	}
+
+	return relationships, updateNodes
+}
+
 func ConvertAzureGroupOwnerToRels(data models.GroupOwners) []IngestibleRelationship {
 	relationships := make([]IngestibleRelationship, 0)
 

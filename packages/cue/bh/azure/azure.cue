@@ -156,6 +156,13 @@ UserPrincipalName: types.#StringEnum & {
 	representation: "userprincipalname"
 }
 
+UserDepartment: types.#StringEnum & {
+	symbol:         "UserDepartment"
+	schema:         "azure"
+	name:           "User Department"
+	representation: "userdepartment"
+}
+
 IsAssignableToRole: types.#StringEnum & {
 	symbol:         "IsAssignableToRole"
 	schema:         "azure"
@@ -283,6 +290,7 @@ Properties: [
 	LoginURL,
 	MFAEnforced,
 	UserPrincipalName,
+	UserDepartment,
 	IsAssignableToRole,
 	PublisherDomain,
 	SignInAudience,
@@ -727,6 +735,12 @@ SyncedToADUser: types.#Kind & {
 	representation:	"SyncedToADUser"
 }
 
+WorkWith: types.#Kind & {
+	symbol:			"WorkWith"
+	schema:			"azure"
+	representation:	"AZUserInteraction"
+}
+
 RelationshipKinds: [
 	AvereContributor,
 	Contains,
@@ -775,6 +789,7 @@ RelationshipKinds: [
 	AZMGGrantAppRoles,
 	AZMGGrantRole,
 	SyncedToADUser,
+	WorkWith,
 ]
 
 AppRoleTransitRelationshipKinds: [
@@ -875,6 +890,7 @@ InboundOutboundRelationshipKinds: [
 	AZMGGrantAppRoles,
 	AZMGGrantRole,
 	SyncedToADUser,
+	WorkWith,
 ]
 
 PathfindingRelationships: list.Concat([InboundOutboundRelationshipKinds, [Contains]])
